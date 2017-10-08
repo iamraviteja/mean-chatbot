@@ -14,3 +14,8 @@ var server = app.listen(process.env.PORT || 8080, function () {
     console.log("App now running on port", port);
 });
 
+// application routes
+app.get('/', function(req, res){
+    res.render("index.html");
+});
+
