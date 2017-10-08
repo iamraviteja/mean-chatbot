@@ -1,20 +1,98 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<header class="masthead bg-color-primary inverse padding-y padding-xxs">
+  <div class="container">
+      <div class="grid grid--center">
+          <div class="grid__column">
+              <h3 class="title">Messenger Bot Manager</h3>
+          </div>
+      </div>
+  </div>
+</header>
+<section class="mastcontent bg-color-lightest">
+  <div class="container padding-y padding-lg">
+      <div class="grid">
+          <div class="main-content grid__column grid__column--12 grid__column--9--md flex-first flex-last--md">
+              <div class="title-set">
+                  <h2 class="title">Welcome to Messenger Bot Manager</h2>
+                  <p class="lead">
+                      Application is deployed and running successfully. Please check the navigation links for further actions.
+                  </p>
+                  <hr>
+              </div>
+              <div>
+                  <h2>Create Application</h2>
+                  <p>
+                      Create new bot applications by following the instructons below.
+                      <div class="color-primary">
+                          Please make sure that you have created your facebook page and generated your access token for your messenger bot.Dont know how checkout this link?
+                      </div> 
+                  </p>
+                  <form>
+                      <div class="grid">
+                          <div class="grid__column grid__column--12">
+                              <div class="control control--block">
+                                  <label for="appid" class="control__label">
+                                      Step 1: Create your application name
+                                  </label>
+                                  <span class="type-small">(Application name must be unique)</span>
+                                  <input type="text" class="control__input" id="appid" placeholder="Application Name" />
+                              </div>
+                          </div>
+                          <div class="grid__column grid__column--12">
+                              <div class="control control--block">
+                                  <label for="apptoken" class="control__label">
+                                      Step 2: Enter the page access token
+                                  </label>
+                                  <span class="type-small">(Copy and paste the application token from facebook)</span>
+                                  <input type="text" class="control__input" id="apptoken" placeholder="Application Token" />
+                              </div>
+                          </div>
+                          <div class="grid__column grid__column--12">
+                              <div class="control control--block">
+                                  <label for="vtoken" class="control__label">
+                                      Step 3: Enter the verification token
+                                  </label>
+                                  <span class="type-small">(Please use the same verification token when using your webhook url)</span>
+                                  <input type="text" class="control__input" id="vtoken" placeholder="Verification Token" />
+                              </div>
+                          </div>
+                          <div class="grid__column grid__column--12">
+                              <div class="control control--block">
+                                  <label for="appdescription" class="control__label">
+                                      Step 4: Enter the description for your application <span class="type-small color-primary">Optional</span>
+                                  </label>
+                                  <textarea class="control__textarea control__textarea--md" placeholder="Type your description here..." id="appdescription"></textarea>
+                              </div>
+                          </div>
+                          <div class="grid__column">
+                              <div class="control control--block">
+                                  <input class="control__button button button--filled button--primary" type="submit" value="Generate webhook URL">
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <nav class="sidebar grid__column grid__column--12 grid__column--3--md flex-last flex-first--md">
+              <div class="title-set">
+                  <h5 class="title">Actions</h5>
+                  <ul class="list list--unstyled list--nulled">
+                      <li class="list__item">
+                          <a href="#">Create Application</a>
+                      </li>
+                      <li class="list__item">
+                          <a href="#">Manage Application</a>
+                      </li>
+                  </ul>
+              </div>
+          </nav>
+      </div>
+  </div>
+</section>
+<footer class="mastfoot bg-color-darker inverse padding-y padding-xxs">
+  <div class="container">
+      <div class="grid grid--center">
+          <p>Created by Ravi Teja Darapu</p>
+      </div>
+  </div>
+</footer>
 
