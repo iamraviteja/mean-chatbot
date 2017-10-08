@@ -1,7 +1,9 @@
 var express = require("express");
-var parser = require("body-parser");
+var path = require("path")
+var bodyParser = require("body-parser");
 
 var app = express();
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 // Create link to Angular build directory
@@ -16,6 +18,6 @@ var server = app.listen(process.env.PORT || 8080, function () {
 
 // application routes
 app.get('/', function(req, res){
-    res.render("index.html");
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
