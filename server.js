@@ -60,26 +60,27 @@ var resErrorHandler = function(error, response, body){
 
 router.param('appid',function(req, res, next){
     console.log(req.params['appid']);
-    if(req.params['appid'] && req.params['appid'] == "FirstApp"){
-        req.params['verify_token'] = "sample_token";
-    }else{
-        console.log('failed....');
-        req.params['verify_token'] = "dummy";
-    }
+    // if(req.params['appid'] && req.params['appid'] == "FirstApp"){
+    //     req.params['verify_token'] = "sample_token";
+    // }else{
+    //     console.log('failed....');
+    //     req.params['verify_token'] = "dummy";
+    // }
     next();
 });
 
 
 router.get('/:appid/webhook/',function(req, res){
     console.log(req.params);
-    console.log(req.params['appid'] +" ***** "+ req.params['verify_token']);
-    if(req.query["hub.verify_token"] === req.params['verify_token']){
-        console.log("webhook verification success !!");
-        res.status(200).send(req.query["hub.challenge"]);
-    }else{
-        console.log("webhook verification failed !!");
-        res.sendStatus(403);
-    }
+    res.status(200).send('hey connected');
+    // console.log(req.params['appid'] +" ***** "+ req.params['verify_token']);
+    // if(req.query["hub.verify_token"] === req.params['verify_token']){
+    //     console.log("webhook verification success !!");
+    //     res.status(200).send(req.query["hub.challenge"]);
+    // }else{
+    //     console.log("webhook verification failed !!");
+    //     res.sendStatus(403);
+    // }
 });
 
 app.use('/fbroute', router);
