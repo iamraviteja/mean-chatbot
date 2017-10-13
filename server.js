@@ -69,7 +69,7 @@ var botAppModel = mongoose.model('botAppModel', botAppSchema);
 router.post('/sendApp',function(req, res){
     console.log('post data; ',req.params);
     console.log('post body; ',req.body);
-    res.json(req);
+    res.send(JSON.stringify(req));
 });
 
 router.param('appid',function(req, res, next){
