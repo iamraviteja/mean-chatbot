@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 var distDir = __dirname + "/dist/";
 app.use(express.static(distDir));
 
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -38,16 +38,6 @@ app.get('/', function(req, res){
 });
 
 // sample testing of facebook app
-// EAASq8a5TmXcBAHJeo4Ls0WVKJZCvwgp2FXY6ObqVxz10LQLzUNFxKhzI0lniB9ZAfPOdCpOiZAiMcUDmGZCZCXGg3aLRCGntZCAFLX0KXHZBToXRbov8izCgsrGaMOos708KNmrkmW9WtuOX7JWIO4krczKB5en9SosDZBrbIeLM4AZDZD
-// chatbot response object
-var token = "EAASq8a5TmXcBAHJeo4Ls0WVKJZCvwgp2FXY6ObqVxz10LQLzUNFxKhzI0lniB9ZAfPOdCpOiZAiMcUDmGZCZCXGg3aLRCGntZCAFLX0KXHZBToXRbov8izCgsrGaMOos708KNmrkmW9WtuOX7JWIO4krczKB5en9SosDZBrbIeLM4AZDZD";
-var verify_token = "sample_token";
-
-var resObj = {
-    url:"https://graph.facebook.com/v2.6/me/messages",
-    qs:{access_token: token},
-    method: "POST"
-};
 
 // response error handler 
 var resErrorHandler = function(error, response, body){
@@ -58,6 +48,8 @@ var resErrorHandler = function(error, response, body){
     }
 };
 
+var appIds = {};
+
 var botAppSchema = mongoose.Schema({
     name:String,
     verify_token:String,
@@ -67,33 +59,88 @@ var botAppSchema = mongoose.Schema({
 var botAppModel = mongoose.model('botAppModel', botAppSchema);
 
 router.post('/sendApp',function(req, res){
-    console.log('post data; ',req.params);
-    console.log('post body; ',req.body);
-    res.send(JSON.stringify({req:"req"}));
+    var _res = res;
+    botAppModel.create(req.query, function(err){
+        if(err){
+            _res.send(JSON.stringify({err:err}));
+        }else{
+            _res.send(JSON.stringify({req:req.query}));
+        }
+    })
+    
 });
 
 router.param('appid',function(req, res, next){
     console.log(req.params['appid']);
+    var appId = req.params['appid'];
+    if(appIds[appId]){
+        console.log('app id present');
+        req.params['verify_token'] = appIds[appId].verify_token;
+        req.params['access_token'] = appIds[appId].access_token;
+        next();
+    }else{
+        botAppModel.findOne({'name':appId}, function(err, botAppModel){
+            if(err) console.log(err);
+            console.log(botAppModel);
+            if(botAppModel){
+                req.params['verify_token'] = botAppModel.verify_token; 
+                req.params['access_token'] = botAppModel.access_token;
+                appIds[botAppModel.name] = botAppModel;
+            } 
+            next();
+        });
+    }
+    
     // if(req.params['appid'] && req.params['appid'] == "FirstApp"){
     //     req.params['verify_token'] = "sample_token";
     // }else{
     //     console.log('failed....');
     //     req.params['verify_token'] = "dummy";
     // }
-    next();
 });
 
 router.get('/:appid/webhook/',function(req, res){
     console.log(req.params);
-    res.status(200).send('hey connected');
-    // console.log(req.params['appid'] +" ***** "+ req.params['verify_token']);
-    // if(req.query["hub.verify_token"] === req.params['verify_token']){
-    //     console.log("webhook verification success !!");
-    //     res.status(200).send(req.query["hub.challenge"]);
-    // }else{
-    //     console.log("webhook verification failed !!");
-    //     res.sendStatus(403);
-    // }
+    console.log(req.params['appid'] +" ***** "+ req.params['verify_token']);
+    if(req.query["hub.verify_token"] === req.params['verify_token']){
+        console.log("webhook verification success !!");
+        res.status(200).send(req.query["hub.challenge"]);
+    }else{
+        console.log("webhook verification failed !!");
+        res.sendStatus(403);
+    }
 });
+
+router.post('/:appid/webhook/', function (req, res) {
+    let messaging_events = req.body.entry[0].messaging
+    for (let i = 0; i < messaging_events.length; i++) {
+	    let event = req.body.entry[0].messaging[i]
+	    let sender = event.sender.id
+	    if (event.message && event.message.text) {
+		    let text = event.message.text
+		    sendTextMessage(req.params['access_token'], sender, "Text received, echo: " + text.substring(0, 200))
+	    }
+    }
+    res.sendStatus(200)
+})
+
+function sendTextMessage(token, sender, text) {
+    let messageData = { text:text }
+    request({
+	    url: 'https://graph.facebook.com/v2.6/me/messages',
+	    qs: {access_token:token},
+	    method: 'POST',
+		json: {
+		    recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+		    console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+		    console.log('Error: ', response.body.error)
+	    }
+    })
+}
 
 app.use('/fbroute', router);
