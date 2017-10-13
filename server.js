@@ -58,6 +58,19 @@ var resErrorHandler = function(error, response, body){
     }
 };
 
+var botAppSchema = mongoose.Schema({
+    name:String,
+    verify_token:String,
+    access_token:String
+});
+
+var botAppModel = mongoose.model('botAppModel', botAppSchema);
+
+router.post('/sendApp',function(req, res){
+    console.log('post data; ',req);
+    res.send('posted success');
+});
+
 router.param('appid',function(req, res, next){
     console.log(req.params['appid']);
     // if(req.params['appid'] && req.params['appid'] == "FirstApp"){
@@ -68,7 +81,6 @@ router.param('appid',function(req, res, next){
     // }
     next();
 });
-
 
 router.get('/:appid/webhook/',function(req, res){
     console.log(req.params);
