@@ -67,7 +67,7 @@ var botAppSchema = mongoose.Schema({
 var botAppModel = mongoose.model('botAppModel', botAppSchema);
 
 router.post('/sendApp',function(req, res){
-    console.log('post data; ',req);
+    console.log('post data; ',req.params);
     res.send('posted success');
 });
 
