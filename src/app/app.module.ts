@@ -1,4 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule} from '@angular/platform-browser';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ClarityModule } from 'clarity-angular';
 import { CreateApplicationModule } from './create-application/create-application.module';
@@ -12,6 +14,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     ClarityModule.forRoot(),
     ManageApplicationModule,
     CreateApplicationModule,
