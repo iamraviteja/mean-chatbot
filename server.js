@@ -128,8 +128,8 @@ router.post('/:appid/webhook/', function (req, res) {
 
 	    if (event.message && event.message.text) {
             let text = event.message.text;
-            ctx.match(text, function(err, text, contextCb){
-                if(!err) contextCb(sender, text);
+            ctx.match(text, function(err, match, contextCb){
+                if(!err) contextCb(sender, match);
                 if(err) console.log('error',err);
             });
 		    //sendTextMessage(req.params['access_token'], sender, "Text received, echo: " + text.substring(0, 200))
@@ -141,13 +141,23 @@ router.post('/:appid/webhook/', function (req, res) {
 
 function initContext(userId, token){
     let ctx = contextMap.getOrCreate(userId);
-    ctx.set(/.*/, (match)=> baseMatchAction(userId, token, match));
+    ctx.set(/.*/, (match)=> baseMatchAction(userId, token));
 }
 
-function baseMatchAction(userId, token, match){
+function baseMatchAction(userId, token){
     let ctx = contextMap.getOrCreate(userId);
-    
-    sendTextMessage(token, userId, "context matched : "+match);
+    let cb = function(bool, text){
+        if(bool) return text;
+        return 'failed attempt';
+    }
+    ctx.set(function(text, cb){
+        return true;
+    }, (match)=>nextMatch(userId, token, match));
+    sendTextMessage(token, userId, "set the timmer value?");
+}
+
+function nextMatch(userId, token, val){
+    sendTextMessage(token, userId, "timmer set to "+val+"secs");
 }
 
 function sendTextMessage(token, sender, text) {
