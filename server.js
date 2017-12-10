@@ -141,14 +141,13 @@ router.post('/:appid/webhook/', function (req, res) {
 
 function initContext(userId, token){
     let ctx = contextMap.getOrCreate(userId);
-    ctx.set(/.*/, (match)=> baseMatchAction(userId, token));
+    ctx.set(/.*/, (match)=> baseMatchAction(userId, token, match));
 }
 
-function baseMatchAction(userId, token){
+function baseMatchAction(userId, token, match){
     let ctx = contextMap.getOrCreate(userId);
-
-    //ctx.set('basecontext');
-    sendTextMessage(token, userId, "context matched hurray!!");
+    
+    sendTextMessage(token, userId, "context matched : "+match);
 }
 
 function sendTextMessage(token, sender, text) {
