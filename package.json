@@ -29,6 +29,7 @@
     "@angular/router": "^4.2.4",
     "@webcomponents/custom-elements": "^1.0.4",
     "body-parser": "^1.18.2",
+    "bot-context": "^0.2.6",
     "clarity-angular": "^0.10.8",
     "clarity-icons": "^0.10.8",
     "clarity-ui": "^0.10.8",
