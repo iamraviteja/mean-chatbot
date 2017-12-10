@@ -130,6 +130,7 @@ router.post('/:appid/webhook/', function (req, res) {
             let text = event.message.text;
             ctx.match(text, function(err, match, contextCb){
                 if(!err) contextCb(sender, match);
+                if(err) console.log('error',err);
             });
 		    //sendTextMessage(req.params['access_token'], sender, "Text received, echo: " + text.substring(0, 200))
         }
@@ -146,7 +147,7 @@ function initContext(userId, token){
 function baseMatchAction(userId, token){
     let ctx = contextMap.getOrCreate(userId);
 
-    ctx.set('basecontext');
+    //ctx.set('basecontext');
     sendTextMessage(token, userId, "context matched hurray!!");
 }
 
