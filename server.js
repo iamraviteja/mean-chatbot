@@ -128,8 +128,8 @@ router.post('/:appid/webhook/', function (req, res) {
 
 	    if (event.message && event.message.text) {
             let text = event.message.text;
-            ctx.match(text, function(err, match, contextCb){
-                if(!err) contextCb(sender, match);
+            ctx.match(text, function(err, text, contextCb){
+                if(!err) contextCb(sender, text);
                 if(err) console.log('error',err);
             });
 		    //sendTextMessage(req.params['access_token'], sender, "Text received, echo: " + text.substring(0, 200))
