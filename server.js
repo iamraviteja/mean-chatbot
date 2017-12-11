@@ -3,7 +3,6 @@ var path = require("path")
 var bodyParser = require("body-parser");
 var request = require('request')
 var mongoose = require('mongoose');
-var contextMap = require('bot-context');
 
 var router = express.Router({mergeParams:true});
 
@@ -122,37 +121,15 @@ router.post('/:appid/webhook/', function (req, res) {
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
 
-        let ctx = contextMap.getOrCreate(sender);
-
-        if(!ctx.isSet()) initContext(sender, req.params['access_token']);
-
 	    if (event.message && event.message.text) {
             let text = event.message.text;
-            ctx.match(text, function(err, match, contextCb){
-                if(!err) contextCb(sender, match);
-                if(err) console.log('error',err);
-            });
-		    //sendTextMessage(req.params['access_token'], sender, "Text received, echo: " + text.substring(0, 200))
+		    sendTextMessage(req.params['access_token'], sender, "Text received, echo: " + text.substring(0, 200));
         }
         
     }
     res.sendStatus(200)
 })
 
-function initContext(userId, token){
-    let ctx = contextMap.getOrCreate(userId);
-    ctx.set(/.*/, (match)=> baseMatchAction(userId, token));
-}
-
-function baseMatchAction(userId, token){
-    let ctx = contextMap.getOrCreate(userId);
-    ctx.set(/(yes|no)/, (match)=>nextMatch(userId, token, match));
-    sendTextMessage(token, userId, "set the timmer value?");
-}
-
-function nextMatch(userId, token, val){
-    sendTextMessage(token, userId, "timmer set to "+val+"secs");
-}
 
 function sendTextMessage(token, sender, text) {
     let messageData = { text:text }
