@@ -146,7 +146,7 @@ function initContext(userId, token){
 
 function baseMatchAction(userId, token){
     let ctx = contextMap.getOrCreate(userId);
-    ctx.set(/\d+/g, (match)=>nextMatch(userId, token, match));
+    ctx.set(/(yes|no)/, (match)=>nextMatch(userId, token, match));
     sendTextMessage(token, userId, "set the timmer value?");
 }
 
