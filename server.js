@@ -10,6 +10,8 @@ var app = express();
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
+var botContext =[];
+
 // Create link to Angular build directory
 var distDir = __dirname + "/dist/";
 app.use(express.static(distDir));
@@ -123,10 +125,12 @@ router.post('/:appid/webhook/', function (req, res) {
 
 	    if (event.message && event.message.text) {
             let text = event.message.text;
+            botContext.push(text);
 		    sendTextMessage(req.params['access_token'], sender, "Text received, echo: " + text.substring(0, 200));
         }
         
     }
+    console.log('bot context :',botContext);
     res.sendStatus(200)
 })
 
